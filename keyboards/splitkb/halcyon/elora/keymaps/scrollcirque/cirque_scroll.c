@@ -19,11 +19,12 @@ static int16_t scroll_remainder_v = 0;
 report_mouse_t pointing_device_task_combined_user(report_mouse_t left_report, report_mouse_t right_report) {
     report_mouse_t *scroll = CIRQUE_SCROLL_PAD_LEFT ? &left_report : &right_report;
 
-    // Mouse y grows downwards and wheel v grows upwards, so negate y: moving
-    // the finger down scrolls down, like a mouse wheel. Negate x as well, or
-    // drop the minus on y, to reverse a direction.
-    scroll_remainder_h += scroll->x;
-    scroll_remainder_v -= scroll->y;
+    // Content follows the finger, like a touchscreen. Mouse y grows
+    // downwards and wheel v grows upwards, so finger down gives v up (scroll
+    // towards the top); h grows rightwards, so negate x: finger right gives
+    // h left. Flip both signs for mouse-wheel direction instead.
+    scroll_remainder_h -= scroll->x;
+    scroll_remainder_v += scroll->y;
 
     scroll->h = scroll_remainder_h / CIRQUE_SCROLL_DIVISOR;
     scroll->v = scroll_remainder_v / CIRQUE_SCROLL_DIVISOR;
