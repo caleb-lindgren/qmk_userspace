@@ -26,10 +26,9 @@
 // Trackpad movement per scroll step; raise it to scroll slower.
 #define CIRQUE_SCROLL_DIVISOR 8
 
-// Holding the outer top-row key of a half while plugging that half in
-// (USB or the cable to the other half) jumps to the bootloader without
-// needing a QK_BOOT key in the keymap. It also clears that half's saved
-// Vial keymap. QMK's default, matrix position [0, 0], is not a key on the
+// Holding the outer top-row key of a half while plugging USB into that
+// half jumps to the bootloader without needing a QK_BOOT key in the keymap.
+// It also clears that half's saved Vial keymap. QMK's default, matrix position [0, 0], is not a key on the
 // Elora; [0, 6] and [5, 6] are the top-left and top-right keys.
 #define BOOTMAGIC_ROW 0
 #define BOOTMAGIC_COLUMN 6
