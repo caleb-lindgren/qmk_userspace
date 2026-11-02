@@ -82,10 +82,9 @@ Any of these, from most to least convenient:
 - **A `QK_BOOT` key** in the keymap of the half that has the USB cable.
   The key only exists on a half whose own stored keymap contains it; see
   [Adding a QK_BOOT key](#adding-a-qk_boot-key-to-a-halfs-keymap).
-- **Double-tapping the reset button** on the controller. The second tap
-  must come within 200 ms of the first
-  (`RP2040_BOOTLOADER_DOUBLE_TAP_RESET`, timeout from vial-qmk's
-  `platforms/chibios/bootloaders/rp2040.c`).
+- **Double-tapping the reset button** on the controller. The second tap must
+  come within 200 ms of the first (`RP2040_BOOTLOADER_DOUBLE_TAP_RESET`,
+  timeout from vial-qmk's `platforms/chibios/bootloaders/rp2040.c`).
 - **The boot button**: hold it while plugging in USB. This works whatever
   firmware is installed, but on the left half the module has to come off to
   reach it.
@@ -95,14 +94,13 @@ Any of these, from most to least convenient:
 This works with the firmware already on the keyboard; nothing needs
 rebuilding.
 
-Vial only stores a `QK_BOOT` key while the keyboard is unlocked: on a
-locked keyboard, the firmware replaces any `QK_BOOT` written to the keymap
-with an invalid keycode (vial-qmk
-`quantum/nvm/eeprom/nvm_dynamic_keymap.c`). Unlocking needs one key on each
-half held together: `VIAL_UNLOCK_COMBO_ROWS { 0, 5 }` and
-`VIAL_UNLOCK_COMBO_COLS { 1, 1 }` in `config.h`, the innermost top-row key
-of each half. So a half on its own can never be unlocked. Connect both
-halves instead; the layout still lands only in the half with the USB cable.
+Vial only stores a `QK_BOOT` key while the keyboard is unlocked: on a locked
+keyboard, the firmware replaces any `QK_BOOT` written to the keymap with an
+invalid keycode (vial-qmk `quantum/nvm/eeprom/nvm_dynamic_keymap.c`). Unlocking
+needs one key on each half held together: `VIAL_UNLOCK_COMBO_ROWS { 0, 5 }` and
+`VIAL_UNLOCK_COMBO_COLS { 1, 1 }` in `config.h`, the innermost top-row key of
+each half. So a half on its own can never be unlocked. Connect both halves
+instead; the layout still lands only in the half with the USB cable.
 
 1. Unplug USB, connect the cable between the halves, then plug USB into
    the half that needs the key.
@@ -129,10 +127,10 @@ one particular key is held, the half jumps to the bootloader. It needs no
 QMK's default key position, matrix `[0, 0]`, has no key on the Elora, so
 this keymap's `config.h` sets:
 
-| Half  | Matrix position | Physical key   | Setting                                             |
-| ----- | --------------- | -------------- | --------------------------------------------------- |
-| Left  | `[0, 6]`        | top-left key   | `BOOTMAGIC_ROW 0`, `BOOTMAGIC_COLUMN 6`             |
-| Right | `[5, 6]`        | top-right key  | `BOOTMAGIC_ROW_RIGHT 5`, `BOOTMAGIC_COLUMN_RIGHT 6` |
+| Half  | Matrix position | Physical key  | Setting                                             |
+| ----- | --------------- | ------------- | --------------------------------------------------- |
+| Left  | `[0, 6]`        | top-left key  | `BOOTMAGIC_ROW 0`, `BOOTMAGIC_COLUMN 6`             |
+| Right | `[5, 6]`        | top-right key | `BOOTMAGIC_ROW_RIGHT 5`, `BOOTMAGIC_COLUMN_RIGHT 6` |
 
 These were added in commit `e5524ee`. Firmware built from that commit or
 later has it; firmware built before it does not, and holding the key then
@@ -164,5 +162,5 @@ wrong; the boot button still works.
 ## Splitkb documentation
 
 - [Halcyon firmware](https://docs.splitkb.com/product-guides/halcyon-series/using/firmware)
-- [I can't flash my keyboard](https://docs.splitkb.com/troubleshooting/flashing)
+- [Flashing troubleshooting](https://docs.splitkb.com/troubleshooting/flashing)
 - [Resetting your controller's EEPROM](https://docs.splitkb.com/resources/reset-eeprom)
