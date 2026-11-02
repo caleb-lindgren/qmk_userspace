@@ -15,3 +15,13 @@
 #define RGB_MATRIX_KEYPRESSES
 
 #define DYNAMIC_KEYMAP_LAYER_COUNT 8
+
+// Trackpads: no inertial glide after lifting the finger, no circular scroll
+#define HLC_CIRQUE_NO_GLIDE
+#define HLC_CIRQUE_NO_CIRCULAR_SCROLL
+
+// Which half's trackpad scrolls instead of moving the cursor (see
+// cirque_scroll.c): true for the left half, false for the right.
+#define CIRQUE_SCROLL_PAD_LEFT true
+// Trackpad movement per scroll step; raise it to scroll slower.
+#define CIRQUE_SCROLL_DIVISOR 8
