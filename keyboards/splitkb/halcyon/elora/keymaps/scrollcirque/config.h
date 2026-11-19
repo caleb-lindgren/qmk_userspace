@@ -22,7 +22,7 @@
 
 // Which half's trackpad scrolls instead of moving the cursor (see
 // cirque_scroll.c): true for the left half, false for the right.
-#define CIRQUE_SCROLL_PAD_LEFT true
+#define CIRQUE_SCROLL_PAD_LEFT false
 // Trackpad movement per scroll step; raise it to scroll slower.
 #define CIRQUE_SCROLL_DIVISOR 8
 

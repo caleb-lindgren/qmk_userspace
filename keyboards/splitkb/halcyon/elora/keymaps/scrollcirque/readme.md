@@ -2,10 +2,12 @@
 
 Vial keymap for the Halcyon Elora rev2 with a Cirque trackpad on each half.
 
-- The left trackpad scrolls instead of moving the cursor, in both
-  directions, with content following the finger. Side and speed are set in
-  `config.h` (`CIRQUE_SCROLL_PAD_LEFT`, `CIRQUE_SCROLL_DIVISOR`); the
-  direction is in `cirque_scroll.c`.
+- One trackpad scrolls instead of moving the cursor, in both directions,
+  with content following the finger. It is currently the right one, swapped
+  from the left to test whether the right trackpad's erratic cursor
+  movement follows the hardware. Side and speed are set in `config.h`
+  (`CIRQUE_SCROLL_PAD_LEFT`, `CIRQUE_SCROLL_DIVISOR`); the direction is in
+  `cirque_scroll.c`.
 - Cursor glide (the cursor coasting after the finger lifts) and circular
   scroll are off, through `HLC_CIRQUE_NO_GLIDE` and
   `HLC_CIRQUE_NO_CIRCULAR_SCROLL`.
