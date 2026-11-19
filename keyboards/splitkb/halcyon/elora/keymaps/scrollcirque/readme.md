@@ -161,6 +161,90 @@ layout afterwards. If holding the key does not start the bootloader on
 firmware built from `e5524ee` or later, the matrix positions above are
 wrong; the boot button still works.
 
+## Investigation: erratic cursor trackpad (2026-11-18 to 11-19)
+
+### Symptoms
+
+Only the cursor trackpad (the right one, before the swap) is affected,
+at random times, for minutes at a stretch. The cursor stops following the
+finger: it shakes in place or slides at right angles to the finger's
+movement, then sometimes jumps far in the finger's direction. It also
+clicks without a tap, during episodes and sometimes during otherwise
+normal movement. Afterwards, typing for a while or stepping away usually
+brings it back to normal.
+
+### Setup
+
+- USB goes into the right half, so the right half is the master and reads
+  its own trackpad. The right trackpad's data never crosses the cable
+  between the halves, which rules that cable out.
+- The keyboard is on a USB hub that also carries HDMI to the monitor. The
+  hub plugs into the laptop's USB-C port. The monitor's power cord has an
+  earth pin. The laptop charger is ungrounded and runs the laptop directly
+  when plugged in.
+- The same hub, monitor and charger showed none of this with a holykeebs
+  keyboard using Azoteq TPS43 trackpads.
+
+### Observations
+
+- Scrolling on the left trackpad stayed normal during every episode.
+- For a while on 2026-11-19, unplugging and replugging USB fixed an
+  episode. Later that day, none of the fixes worked consistently: not
+  replugging, not unplugging the charger, not touching something earthed.
+
+### Theories
+
+1. **Flat cable between the trackpad and the module, damaged or not fully
+   seated.** This is the current lead. The cable carries the trackpad
+   chip's power, ground and data lines.
+   - A data line that cuts in and out garbles readings into jumps,
+     dropouts and phantom taps. The tap code (vial-qmk
+     `drivers/sensors/cirque_pinnacle_gestures.c`) counts any lift that
+     comes soon after a touch as a click.
+   - A dropout on power or ground restarts the chip with its factory
+     settings. The driver (`drivers/sensors/cirque_pinnacle.c`) configures
+     the chip once in `cirque_pinnacle_init` and never checks it again, so
+     the keyboard keeps decoding readings in the wrong format until the
+     next power-up.
+   - That fits replugging USB working at first and then not at all, as the
+     contact got worse.
+2. **The trackpad chip's baseline drifting.** The chip keeps a reading of
+   what "no finger" looks like; if that goes wrong, positions bend and
+   touches flicker, until the chip re-measures while nothing touches the
+   pad. This explains episodes ending by themselves, but not the problem
+   getting worse over the day.
+3. **Noise from the ungrounded charger.** Unlikely: the earthed monitor
+   grounds the laptop through the HDMI shield and the hub. That only holds
+   if the monitor's earthed cord goes into the monitor, not into a
+   separate power brick. Unplugging the charger during an episode did not
+   reliably fix it.
+
+### Current test
+
+Commit `4b0c182` swaps the roles: the right trackpad scrolls and the left
+moves the cursor.
+
+- If the cursor stays clean but scrolling on the right turns jumpy or
+  clicks on its own, the fault is in the right trackpad's hardware.
+- If the left trackpad misbehaves as the cursor, the cause is software or
+  something shared by both trackpads.
+
+### Next steps
+
+- Unplug USB and the cable between the halves. Inspect the right
+  trackpad's flat cable for creases. Reseat both ends straight and fully,
+  close the latches, and check the module sits fully in its socket.
+  Swapping the two modules between halves is a further hardware check.
+- Firmware, planned but not started:
+  - halve the cursor speed (`CIRQUE_PINNACLE_DEFAULT_SCALE` is 1024 across
+    the pad, about 29 units per mm on the 35 mm pad);
+  - a dead zone at the start of each touch, so taps and double-taps do not
+    move the cursor;
+  - periodic checks that set the chip up again if its settings have reset;
+  - logging the trackpad's readings to `qmk console`.
+- To compile in a sandbox session, QMK and the ARM compiler have to be
+  installed first.
+
 ## Splitkb documentation
 
 - [Halcyon firmware](https://docs.splitkb.com/product-guides/halcyon-series/using/firmware)
