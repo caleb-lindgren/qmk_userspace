@@ -2,12 +2,10 @@
 
 Vial keymap for the Halcyon Elora rev2 with a Cirque trackpad on each half.
 
-- One trackpad scrolls instead of moving the cursor, in both directions,
-  with content following the finger. It is currently the right one, swapped
-  from the left to test whether the right trackpad's erratic cursor
-  movement follows the hardware. Side and speed are set in `config.h`
-  (`CIRQUE_SCROLL_PAD_LEFT`, `CIRQUE_SCROLL_DIVISOR`); the direction is in
-  `cirque_scroll.c`.
+- The left trackpad scrolls instead of moving the cursor, in both
+  directions, with content following the finger. Side and speed are set in
+  `config.h` (`CIRQUE_SCROLL_PAD_LEFT`, `CIRQUE_SCROLL_DIVISOR`); the
+  direction is in `cirque_scroll.c`.
 - Cursor glide (the cursor coasting after the finger lifts) and circular
   scroll are off, through `HLC_CIRQUE_NO_GLIDE` and
   `HLC_CIRQUE_NO_CIRCULAR_SCROLL`.
@@ -165,7 +163,7 @@ wrong; the boot button still works.
 
 ### Symptoms
 
-Only the cursor trackpad (the right one, before the swap) is affected,
+Only the cursor trackpad (the right one) is affected,
 at random times, for minutes at a stretch. The cursor stops following the
 finger: it shakes in place or slides at right angles to the finger's
 movement, then sometimes jumps far in the finger's direction. It also
@@ -224,9 +222,8 @@ brings it back to normal.
 Theory 1 was right. The right trackpad's flat cable had once been jarred;
 replacing the cable fixed the trackpad.
 
-Commit `4b0c182` had swapped the roles as a test, so the right trackpad
-still scrolls and the left moves the cursor. Swapping back is a keymap
-change, not a fix.
+Commit `4b0c182` had swapped the roles as a test; it has been reverted,
+so the left trackpad scrolls and the right moves the cursor again.
 
 The firmware ideas from the investigation were not needed for this fault
 and were not started. They remain options:
