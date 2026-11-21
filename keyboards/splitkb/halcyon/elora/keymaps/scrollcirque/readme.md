@@ -161,7 +161,7 @@ layout afterwards. If holding the key does not start the bootloader on
 firmware built from `e5524ee` or later, the matrix positions above are
 wrong; the boot button still works.
 
-## Investigation: erratic cursor trackpad (2026-11-18 to 11-19)
+## Investigation: erratic cursor trackpad (2026-11-18 to 11-21)
 
 ### Symptoms
 
@@ -195,7 +195,7 @@ brings it back to normal.
 ### Theories
 
 1. **Flat cable between the trackpad and the module, damaged or not fully
-   seated.** This is the current lead. The cable carries the trackpad
+   seated.** This turned out to be the cause. The cable carries the trackpad
    chip's power, ground and data lines.
    - A data line that cuts in and out garbles readings into jumps,
      dropouts and phantom taps. The tap code (vial-qmk
@@ -219,31 +219,26 @@ brings it back to normal.
    separate power brick. Unplugging the charger during an episode did not
    reliably fix it.
 
-### Current test
+### Resolution (2026-11-21)
 
-Commit `4b0c182` swaps the roles: the right trackpad scrolls and the left
-moves the cursor.
+Theory 1 was right. The right trackpad's flat cable had once been jarred;
+replacing the cable fixed the trackpad.
 
-- If the cursor stays clean but scrolling on the right turns jumpy or
-  clicks on its own, the fault is in the right trackpad's hardware.
-- If the left trackpad misbehaves as the cursor, the cause is software or
-  something shared by both trackpads.
+Commit `4b0c182` had swapped the roles as a test, so the right trackpad
+still scrolls and the left moves the cursor. Swapping back is a keymap
+change, not a fix.
 
-### Next steps
+The firmware ideas from the investigation were not needed for this fault
+and were not started. They remain options:
 
-- Unplug USB and the cable between the halves. Inspect the right
-  trackpad's flat cable for creases. Reseat both ends straight and fully,
-  close the latches, and check the module sits fully in its socket.
-  Swapping the two modules between halves is a further hardware check.
-- Firmware, planned but not started:
-  - halve the cursor speed (`CIRQUE_PINNACLE_DEFAULT_SCALE` is 1024 across
-    the pad, about 29 units per mm on the 35 mm pad);
-  - a dead zone at the start of each touch, so taps and double-taps do not
-    move the cursor;
-  - periodic checks that set the chip up again if its settings have reset;
-  - logging the trackpad's readings to `qmk console`.
-- To compile in a sandbox session, QMK and the ARM compiler have to be
-  installed first.
+- halve the cursor speed (`CIRQUE_PINNACLE_DEFAULT_SCALE` is 1024 across
+  the pad, about 29 units per mm on the 35 mm pad);
+- a dead zone at the start of each touch, so taps and double-taps do not
+  move the cursor;
+- periodic checks that set the chip up again if its settings have reset,
+  which would let the keyboard recover from a brief power dropout on the
+  cable without a replug;
+- logging the trackpad's readings to `qmk console`.
 
 ## Splitkb documentation
 
